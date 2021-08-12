@@ -6,15 +6,14 @@
     font-family: chalk;
     src: url('../picture/chawp.otf');
 }
-body{
+#content{
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-template-rows: 10vh 40vh 50vh;
     grid-template-areas:'logo logo'
                         'input info'
                         'pictures pictures';
-    min-height: 100vh;
-    width: 100vw;
+    width: 100%;
     background-image: url('../picture/rain.png');
     background-image: url('../picture/1390893.jpg');
     color: white;
@@ -23,6 +22,11 @@ body{
     user-select: none;
     background-color: black;
 
+}
+body{
+    
+    min-height: 100vh;
+    
 }
 #logo{
     grid-area: logo;
@@ -122,9 +126,7 @@ body{
     text-align: center;
     overflow: hidden;
     p{
-        background-image: linear-gradient(to left, indigo, rgb(31, 140, 241),  orange, red);
-        background-clip: text;
-        color: transparent;
+        color: rgb(240, 205, 52);
     }
     #image-container{
         width: 80%;
@@ -191,7 +193,7 @@ body{
                 #credit{
                     &:hover{
                         cursor: pointer;
-                        text-decoration: underline !important;
+                        text-decoration: underline ;
                     }  
                 }
             }
@@ -224,7 +226,7 @@ body{
     #info{
         grid-template-columns: 45% 55%;
         #city-name{
-            font-size: 200%;
+            font-size: 150%;
         }
     }
     #pictures{
@@ -241,7 +243,7 @@ body{
     #logo{
         font-size: 200%;
     }
-    body{
+    #content{
         grid-template-columns: 1fr 2fr;
     }
     #input{
@@ -253,7 +255,7 @@ body{
     }
 }
 @media (max-width: 450px){
-    body{
+    #content{
         grid-template-columns: 1fr;
         grid-template-rows: 20vh 30vh 35vh 15vh 100vh;
          grid-template-areas:'logo'
@@ -271,5 +273,69 @@ body{
     }
     #logo{
         font-size: 180%;
+    }
+    #pictures{
+        p{  
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 10vh;
+            font-size: 80%;
+        }
+        #image-container{
+            height: 85vh;
+            width: max-content;
+            display: inline-flex;
+            justify-content: center;
+            cursor: grab !important;
+            transition: transform 0.1s ease-out;
+            .frame{
+                width: 100vw;
+                height: 100%;
+                position: relative;
+                .image-link{
+                    width: 80%;
+                    height: 85%;
+                    margin: 0 auto;
+                    pointer-events: none;
+                    figure{
+                        background-size: 100% 100%;
+                    }
+                }
+                .link{
+                    position: absolute;
+                    bottom: 10%;
+                    left: 35%;
+                    color: #db4a4a;
+                    text-decoration: underline;
+                }
+                #credit{
+                    width: 80%;
+                    height: 15%;
+                    margin: 0 auto;
+                    overflow: hidden;
+                    color: #db4a4a;
+                    text-decoration: underline !important; 
+
+                }
+                &:hover{
+                    flex: 1;
+                }
+            }
+            &::before{
+                background-image: none;
+            }
+            &::after{
+                background-image: none;
+            }
+        }
+        
+    }
+}
+.grabbing{
+    
+    .frame{
+        transform: scale(0.9) !important;
+        cursor: grabbing !important;
     }
 }
