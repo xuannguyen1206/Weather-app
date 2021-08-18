@@ -1,3 +1,4 @@
+const body = document.querySelector('body');
 const input = document.querySelector('#search');
 const searchIcon = document.querySelector('#searchIcon');
 const city_name = document.querySelector('#city-name');
@@ -45,6 +46,10 @@ function changeAdditional(feelLike, windSpeed, humidity) {
 }
 
 function weatherArrangeData(data) {
+  if (!data.sys) {
+    alert(`${input.value}'s weather is not found (city only)`);
+    return;
+  }
   changeCity(data.name, data.sys.country);
   changeTemp(data.main.temp);
   changeStatus(data.weather[0].main);
@@ -52,8 +57,14 @@ function weatherArrangeData(data) {
 }
 
 async function getWeather(cityName) {
-  const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=${weatherApi}`, { mode: 'cors' });
-  const data = await response.json();
+  let response = {};
+  let data = {};
+  try {
+    response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=${weatherApi}`, { mode: 'cors' });
+    data = await response.json();
+  } catch (error) {
+    alert(`${error}: cannot retrieve weather`);
+  }
   weatherArrangeData(data);
 }
 // enter event for input
@@ -81,6 +92,10 @@ function changeFigure(url, link, imageNo) {
 }
 
 function imageArrangeData(data) {
+  if (!data.results[0]) {
+    alert(`image about ${input.value} is not found`);
+    return;
+  } 
   for (let i = 0; i < 7; i += 1) {
     changeFigure(data.results[i].urls.regular, data.results[i].links.html, i);
     changeCredit(data.results[i].user.username, data.results[i].user.links.html, i);
@@ -88,18 +103,25 @@ function imageArrangeData(data) {
 }
 
 async function getImage(cityName) {
-  const response = await fetch(`https://api.unsplash.com/search/photos?query=${cityName}&client_id=${imageApi}&page=${Math.random() * 16 + 1}&per_page=7`);
-  const data = await response.json();
+  let response = {};
+  let data = {};
+  try {
+    response = await fetch(`https://api.unsplash.com/search/photos?query=${cityName}&client_id=${imageApi}&page=${Math.random() * 16 + 1}&per_page=7`);
+    data = await response.json();
+  } catch (error) {
+    alert(`${error}: cannot retrieve image`);
+  }
   imageArrangeData(data);
 }
 
 searchIcon.addEventListener('click', () => {
   getWeather(input.value);
   getImage(input.value);
-  slider.resetIndex();
+  slider.resetIndex(); /* make the slider show the first item whenever user hits search */
 });
 
-const slider = (() => { /* slider moudle for swiping in mobile version */
+/* slider moudle for swiping in mobile version */
+const slider = (() => {
   let isDragging = false;
   let startPos = 0;
   let currentTranslate = 0;
@@ -158,7 +180,7 @@ const slider = (() => { /* slider moudle for swiping in mobile version */
     }
   }
 
-  function initSlider() {
+  function initSlider() { /* attach event listener for the slider + add the link for image */
     frames.forEach((element) => {
       // touch event
       element.addEventListener('touchstart', startDrag);
@@ -203,16 +225,16 @@ const slider = (() => { /* slider moudle for swiping in mobile version */
 })();
 let sliderOn = false;
 
-if (window.innerWidth < 450 && sliderOn === false) {
+if (body.offsetWidth < 450 && sliderOn === false) {
   slider.initSlider();
   sliderOn = true;
 }
 window.addEventListener('resize', () => {
-  if (window.innerWidth < 450 && sliderOn === false) {
+  if (body.offsetWidth < 450 && sliderOn === false) {
     slider.initSlider();
     sliderOn = true;
   }
-  if (window.innerWidth > 450 && sliderOn === true) {
+  if (body.offsetWidth > 450 && sliderOn === true) {
     slider.removeSlider();
     sliderOn = false;
   }
