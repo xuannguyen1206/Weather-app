@@ -386,8 +386,9 @@ body {
     content: 'SROLL DOWN FOR MORE INFO';
     position: absolute;
     color: yellow;
+    font-size: 0.8rem;
     bottom: -35%;
-    left: 12%;
+    left: 23%;
   }
   #pictures p {
     display: -webkit-box;
